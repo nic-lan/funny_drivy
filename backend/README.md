@@ -1,9 +1,14 @@
 # Drivy Backend Challenge
 
+ Looking for a job? Check out our [open positions](https://en.drivy.com/jobs).
+
 ## Guidelines
 
-Fork this repo.
-Solve the levels in ascending order, an commit your code at the end of each level.
+- clone this repo (do **not** fork it)
+- solve the levels in ascending order
+- commit your code at the end of each level
+- once you are done, ping someone from drivy (ideally via our jobs page)
+
 You can have a look at the higher levels, but please do the **simplest thing** that could work for the level you're currently solving.
 
 Disclaimer: the levels become more complex over time, so you will probably have to re-use some code and adapt it to the new requirements.
