@@ -7,7 +7,7 @@ module Services
     attr_reader :data
 
     def initialize(data)
-      @data = JSON.parse(data).deep_symbolize_keys
+      @data = data.deep_symbolize_keys
     end
 
     def rentals_with_car_h

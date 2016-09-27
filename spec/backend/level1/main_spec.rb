@@ -1,51 +1,10 @@
 require "./spec/spec_helper"
-require "./backend/level1/main"
 
-RSpec.describe Backend::Level1::Main do
-  let(:data) do
-    {
-      "cars" => [
-        { "id" => 1, "price_per_day" => 2000, "price_per_km" => 10 },
-        { "id" => 2, "price_per_day" => 3000, "price_per_km" => 15 },
-        { "id" => 3, "price_per_day" => 1700, "price_per_km" => 8 }
-      ],
-      "rentals" => [
-        {
-          "id" => 1,
-          "car_id" => 1,
-          "start_date" => "2017-12-8",
-          "end_date" => "2017-12-10",
-          "distance" => 100
-        },
-        {
-          "id" => 2,
-          "car_id" => 1,
-          "start_date" => "2017-12-14",
-          "end_date" => "2017-12-18",
-          "distance" => 550
-        },
-        {
-          "id" => 3,
-          "car_id" => 2,
-          "start_date" => "2017-12-8",
-          "end_date" => "2017-12-10",
-          "distance" => 150
-        }
-      ]
-    }.to_json
-  end
+RSpec.describe "Level1" do
+  let(:data) { JSON.parse(File.read("./backend/level1/data.json")) }
+  let(:output) { JSON.parse(File.read("./backend/level1/output.json")).to_json }
 
-  let(:output) do
-    {
-      "rentals" => [
-        { "id" => 1, "price" => 7000 },
-        { "id" => 2, "price" => 15_500 },
-        { "id" => 3, "price" => 11_250 }
-      ]
-    }.to_json
-  end
-
-  subject { described_class.perform(data) }
+  subject { ::Backend::Main.perform(data) }
 
   describe ".perform" do
     it "returns the correct values" do

@@ -10,23 +10,15 @@ RSpec.describe Serializers::Rental do
       distance: 100
     )
   end
-  let(:car) { double(:car, id: 1, price_per_day: 2000, price_per_km: 10) }
+  let(:price) { double(:price, value: 5000) }
 
-  subject { described_class.new(rental: rental, car: car) }
+  subject { described_class.new(rental: rental, price: price) }
 
   describe "#as_json" do
-    let(:expected) { { id: 1, price: 7000 } }
+    let(:expected) { { id: 1, price: 5000 } }
 
     it "serializes successfully by the given entities" do
       expect(subject.as_json).to eq expected
-    end
-  end
-
-  describe "#price" do
-    let(:price) { 7000 }
-
-    it "returns the price successfully" do
-      expect(subject.price).to eq 7000
     end
   end
 end

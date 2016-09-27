@@ -1,4 +1,5 @@
 require "json"
-require "./backend/level1/main"
-require "./backend/level2/main"
+require "./backend/main"
 require "./services/repository"
+require "./models/car"
+require "./models/rental"

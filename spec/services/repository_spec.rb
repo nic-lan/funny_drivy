@@ -1,7 +1,7 @@
 require "./spec/spec_helper"
 
 RSpec.describe Services::Repository do
-  let(:input_data) { repository_data.to_json }
+  let(:input_data) { repository_data }
   let(:rental_params_first) do
     {
       id:  1,
