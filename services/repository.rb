@@ -10,7 +10,7 @@ module Services
       @data = data.deep_symbolize_keys
     end
 
-    def rentals_with_car_h
+    def rentals_with_car
       data[:rentals].map do |rental_params|
         rental = ::Models::Rental.new(rental_params)
         car = car_by_rental(rental)

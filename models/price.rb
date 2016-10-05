@@ -4,16 +4,38 @@ module Models
   class Price
     include ActiveModel::Model
 
-    attr_accessor :rental, :car, :discount
+    attr_accessor :rental, :car, :opts
     delegate :price_per_day, :price_per_km, to: :car
     delegate :start_date, :end_date, :distance, to: :rental
     delegate :parse, to: Date
 
+    def initialize(rentals_with_car, opts)
+      @rental = rentals_with_car[:rental]
+      @car = rentals_with_car[:car]
+      @opts = opts
+    end
+
     def value
-      time_price.to_i + distance_price
+      @_value ||= time_price.to_i + distance_price
+    end
+
+    def insurance_fee
+      @_insurance_fee ||= (0.5 * commission).to_i
+    end
+
+    def assistance_fee
+      @_assistance_fee ||= 100 * day_number
+    end
+
+    def drivy_fee
+      insurance_fee - assistance_fee
     end
 
     private
+
+    def commission
+      value * 0.30
+    end
 
     def time_price
       apply_discount * day_number * price_per_day
@@ -28,7 +50,7 @@ module Models
     end
 
     def apply_discount
-      return 1 unless discount
+      return 1 unless opts[:discount]
       no_discount || small || medium || large
     end
 

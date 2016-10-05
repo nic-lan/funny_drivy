@@ -6,3 +6,6 @@ Documentation:
 
 AlignParameters:
     Enable: false
+
+AllCops:
+  TargetRubyVersion: 2.4

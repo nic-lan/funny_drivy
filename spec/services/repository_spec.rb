@@ -40,7 +40,7 @@ RSpec.describe Services::Repository do
     end
   end
 
-  describe "#rentals_with_car_h" do
+  describe "#rentals_with_car" do
     # FIX ME : context case when not consistent data ( ex: rental with wrong
     # car_id ) not provided for the moment. It has be assumed that the provided
     # data that instantiates the repo is correct
@@ -49,7 +49,7 @@ RSpec.describe Services::Repository do
     let(:rental_last_id) { 2 }
 
     it "returns all the existing rentals" do
-      rentals = subject.rentals_with_car_h
+      rentals = subject.rentals_with_car
       expect(rentals.count).to eq 2
 
       expect(rentals.first[:rental].id).to eq 1
