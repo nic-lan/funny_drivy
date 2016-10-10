@@ -4,7 +4,11 @@ require "./models/price"
 
 module Backend
   class Main
-    def self.perform(data, opts = { discount: false, commission: false })
+    DEFAULTS_OPTS = {
+      discount: false, commission: false, deductible: false
+    }.freeze
+
+    def self.perform(data, opts = DEFAULTS_OPTS)
       new(data, opts).perform
     end
 

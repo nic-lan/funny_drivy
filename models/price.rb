@@ -6,8 +6,7 @@ module Models
 
     attr_accessor :rental, :car, :opts
     delegate :price_per_day, :price_per_km, to: :car
-    delegate :start_date, :end_date, :distance, to: :rental
-    delegate :parse, to: Date
+    delegate :day_number, :distance, to: :rental
 
     def initialize(rentals_with_car, opts)
       @rental = rentals_with_car[:rental]
@@ -31,6 +30,10 @@ module Models
       insurance_fee - assistance_fee
     end
 
+    def deductible_reduction
+      rental.deductible_reduction ? 400 * day_number : 0
+    end
+
     private
 
     def commission
@@ -43,10 +46,6 @@ module Models
 
     def distance_price
       distance * price_per_km
-    end
-
-    def day_number
-      @_day_number ||= (parse(end_date) - parse(start_date) + 1).to_i
     end
 
     def apply_discount

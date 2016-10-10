@@ -2,7 +2,7 @@ require "./models/price"
 
 RSpec.describe Models::Price do
   let(:rental) do
-    double :rental, start_date: "2015-12-8", end_date: end_date, distance: 100
+    double :rental, day_number: day_number, distance: 100
   end
   let(:car) { double :car, price_per_day: 1000, price_per_km: 10 }
   let(:rentals_with_car) { { rental: rental, car: car } }
@@ -12,7 +12,7 @@ RSpec.describe Models::Price do
   subject { described_class.new(rentals_with_car, opts) }
 
   describe "#insurance_fee, assistance_fee, drivy_fee" do
-    let(:end_date) { "2015-12-8" }
+    let(:day_number) { 1 }
 
     before { allow(subject).to receive(:value).and_return(1000) }
 
@@ -32,7 +32,7 @@ RSpec.describe Models::Price do
   describe "#value" do
     let(:expected_distance_price) { 1000 }
     context "when discount set to false" do
-      let(:end_date) { "2015-12-18" }
+      let(:day_number) { 11 }
       let(:discount) { false }
 
       it "does not apply any discount" do
@@ -41,7 +41,7 @@ RSpec.describe Models::Price do
     end
 
     context "when 1 day" do
-      let(:end_date) { "2015-12-8" }
+      let(:day_number) { 1 }
 
       it "does not apply any discount" do
         expect(subject.value).to eq 1000 + expected_distance_price
@@ -49,15 +49,15 @@ RSpec.describe Models::Price do
     end
 
     context "when between 2 and 4 days" do
-      let(:end_date) { "2015-12-9" }
+      let(:day_number) { 2 }
 
-      it "applies a discount of 10% discount" do
+      it "applies a discount of 5% discount" do
         expect(subject.value).to eq 1900 + expected_distance_price
       end
     end
 
     context "when between 5 and 10 " do
-      let(:end_date) { "2015-12-12" }
+      let(:day_number) { 5 }
 
       it "applies a discount of 30% discount" do
         expect(subject.value).to eq 3500 + expected_distance_price
@@ -65,10 +65,32 @@ RSpec.describe Models::Price do
     end
 
     context "when more than 11" do
-      let(:end_date) { "2015-12-18" }
+      let(:day_number) { 11 }
 
-      it "applies a discount of 50% discount" do
+      it "applies a discount of 25,83% discount" do
         expect(subject.value).to eq 8158 + expected_distance_price
+      end
+    end
+  end
+
+  describe "deductible_reduction" do
+    context "when given rental chooses for a deductible_reduction" do
+      let(:rental) do
+        double :rental, day_number: 1, deductible_reduction: true
+      end
+
+      it "returns the correct value for the deductible reduction" do
+        expect(subject.deductible_reduction).to eq 400
+      end
+    end
+
+    context "when given rental chooses for a deductible_reduction" do
+      let(:rental) do
+        double :rental, day_number: 1, deductible_reduction: false
+      end
+
+      it "returns the correct value for the deductible reduction" do
+        expect(subject.deductible_reduction).to eq(0)
       end
     end
   end

@@ -2,10 +2,16 @@ StringLiterals:
   Enabled: false
 
 Documentation:
-    Enabled: false
+  Enabled: false
 
-AlignParameters:
-    Enable: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/AlignParameters:
+  Enabled: false
 
 AllCops:
   TargetRubyVersion: 2.4
+
+AlignParametes:
+  Enable: false
