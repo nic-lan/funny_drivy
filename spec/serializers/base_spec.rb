@@ -1,22 +1,20 @@
-require "./serializers/rental"
+require "./serializers/base"
 
-RSpec.describe Serializers::Rental do
-  let(:rental) { double(:rental, id: 1) }
-
-  let(:price) do
-    double(
-      :price,
+RSpec.describe Serializers::Base do
+  subject do
+    double(:worker,
+      id: 1,
       value: 5000,
       insurance_fee: 4170,
       assistance_fee: 1200,
       drivy_fee: 2970,
-      deductible_reduction: 400
-    )
+      deductible_reduction: 400,
+      opts: opts)
   end
 
-  subject { described_class.new(rental: rental, price: price, opts: opts) }
-
   describe "#as_json" do
+    before { subject.extend Serializers::Base }
+
     context "when opts is false" do
       let(:opts) { { commission: false } }
       let(:expected) { { id: 1, price: 5000 } }

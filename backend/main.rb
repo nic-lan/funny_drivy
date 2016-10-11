@@ -1,14 +1,14 @@
 require "./services/repository"
-require "./serializers/rental"
+require "./serializers/worker"
 require "./models/price"
 
 module Backend
   class Main
     DEFAULTS_OPTS = {
-      discount: false, commission: false, deductible: false
+      discount: false, commission: false, deductible: false, serializer: :base
     }.freeze
 
-    def self.perform(data, opts = DEFAULTS_OPTS)
+    def self.perform(data, opts = {})
       new(data, opts).perform
     end
 
@@ -28,7 +28,7 @@ module Backend
 
     def rental_serializers
       rentals_with_car.map do |rental_with_car|
-        Serializers::Rental.new(
+        Serializers::Worker.setup(
           rental: rental_with_car[:rental],
           price: ::Models::Price.new(rental_with_car, opts),
           opts: opts

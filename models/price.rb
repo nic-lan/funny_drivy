@@ -31,7 +31,9 @@ module Models
     end
 
     def deductible_reduction
-      rental.deductible_reduction ? 400 * day_number : 0
+      @_deductible_reduction ||= begin
+        rental.deductible_reduction ? 400 * day_number : 0
+      end
     end
 
     private

@@ -76,7 +76,7 @@ RSpec.describe Models::Price do
   describe "deductible_reduction" do
     context "when given rental chooses for a deductible_reduction" do
       let(:rental) do
-        double :rental, day_number: 1, deductible_reduction: true
+        double :rental, day_number: 1, deductible_reduction: true, distance: 100
       end
 
       it "returns the correct value for the deductible reduction" do
@@ -86,7 +86,10 @@ RSpec.describe Models::Price do
 
     context "when given rental chooses for a deductible_reduction" do
       let(:rental) do
-        double :rental, day_number: 1, deductible_reduction: false
+        double :rental,
+          day_number: 1,
+          deductible_reduction: false,
+          distance: 100
       end
 
       it "returns the correct value for the deductible reduction" do
