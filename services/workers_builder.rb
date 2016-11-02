@@ -2,8 +2,8 @@ require "./serializers/worker"
 require "./serializers/base"
 require "./serializers/improved"
 
-module Controllers
-  class WorkersController
+module Services
+  class WorkersBuilder
     def self.create(serializer_attrs)
       new(serializer_attrs).create
     end

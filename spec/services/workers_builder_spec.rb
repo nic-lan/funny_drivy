@@ -1,10 +1,12 @@
-require "./controllers/workers_controller"
+require "./services/workers_builder"
 
-describe Controllers::WorkersController do
+describe Services::WorkersBuilder do
   let(:rental) { double :rental, id: :whatever }
   let(:price) { double :price }
 
-  subject { described_class.create(rental: rental, price: price, opts: opts) }
+  subject do
+    described_class.create(priceable: rental, price: price, opts: opts)
+  end
 
   describe "#create" do
     context "when opts serializer key is :base" do
@@ -13,7 +15,7 @@ describe Controllers::WorkersController do
       it "extends the base serializer" do
         expect(subject).to be_a Serializers::Base
         expect(subject.price).to eq price
-        expect(subject.rental).to eq rental
+        expect(subject.priceable).to eq rental
       end
     end
 
@@ -23,7 +25,7 @@ describe Controllers::WorkersController do
       it "extends the base serializer" do
         expect(subject).to be_a Serializers::Improved
         expect(subject.price).to eq price
-        expect(subject.rental).to eq rental
+        expect(subject.priceable).to eq rental
       end
     end
   end

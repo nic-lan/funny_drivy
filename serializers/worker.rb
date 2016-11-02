@@ -6,9 +6,9 @@ module Serializers
   class Worker
     include ActiveModel::Model
 
-    attr_accessor :rental, :price, :opts
+    attr_accessor :priceable, :price, :opts
 
-    delegate :id, to: :rental
+    delegate :id, to: :priceable
 
     delegate :value,
       :insurance_fee,

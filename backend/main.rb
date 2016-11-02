@@ -1,5 +1,5 @@
 require "./serializers/collection"
-require "./controllers/workers_controller"
+require "./services/workers_builder"
 require "./services/repository"
 require "./models/price"
 
@@ -25,22 +25,26 @@ module Backend
     end
 
     def perform
-      Serializers::Collection.create(opts, rental_serializers).to_json
+      Serializers::Collection.create(opts, serializers).to_json
     end
 
     private
 
-    def rentals
-      Services::Repository.new(data).rentals
+    def resources
+      Services::Repository.new(data).send(path)
     end
 
-    def rental_serializers
-      rentals.map { |rental| create_worker(rental) }
+    def path
+      opts[:path]
+    end
+
+    def serializers
+      resources.map { |rental| create_worker(rental) }
     end
 
     def create_worker(resource)
-      Controllers::WorkersController.create(
-        rental: resource.rental,
+      Services::WorkersBuilder.create(
+        priceable: resource.rental,
         price: ::Models::Price.new(resource, opts),
         opts: opts
       )
