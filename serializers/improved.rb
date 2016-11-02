@@ -12,23 +12,5 @@ module Serializers
         ]
       }
     end
-
-    private
-
-    def driver
-      value + deductible_reduction
-    end
-
-    def drivy
-      drivy_fee + deductible_reduction
-    end
-
-    def owner
-      value - (insurance_fee + drivy_fee + assistance_fee)
-    end
-
-    def action(who:, type:, amount:)
-      { who: who, type: type, amount: amount }
-    end
   end
 end

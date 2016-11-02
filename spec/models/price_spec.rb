@@ -4,6 +4,7 @@ RSpec.describe Models::Price do
   let(:rental) do
     double :rental, day_number: day_number, distance: 100
   end
+  let(:day_number) { 1 }
   let(:car) { double :car, price_per_day: 1000, price_per_km: 10 }
   let(:rentals_with_car) { { rental: rental, car: car } }
   let(:discount) { true }
@@ -95,6 +96,41 @@ RSpec.describe Models::Price do
       it "returns the correct value for the deductible reduction" do
         expect(subject.deductible_reduction).to eq(0)
       end
+    end
+  end
+
+  describe "#driver" do
+    before do
+      allow(subject).to receive(:value).and_return(1)
+      allow(subject).to receive(:deductible_reduction).and_return(1)
+    end
+
+    it "returns the correct driver value" do
+      expect(subject.driver).to eq 2
+    end
+  end
+
+  describe "#drivy" do
+    before do
+      allow(subject).to receive(:drivy_fee).and_return(1)
+      allow(subject).to receive(:deductible_reduction).and_return(1)
+    end
+
+    it "returns the correct driver value" do
+      expect(subject.drivy).to eq 2
+    end
+  end
+
+  describe "#owner" do
+    before do
+      allow(subject).to receive(:value).and_return(3)
+      allow(subject).to receive(:drivy_fee).and_return(1)
+      allow(subject).to receive(:insurance_fee).and_return(1)
+      allow(subject).to receive(:assistance_fee).and_return(1)
+    end
+
+    it "returns the correct driver value" do
+      expect(subject.owner).to eq 0
     end
   end
 end

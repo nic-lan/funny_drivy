@@ -27,13 +27,13 @@ module Backend
     private
 
     def rental_serializers
-      rentals.map { |rental_with_car| create_worker(rental_with_car) }
+      rentals.map { |rental| create_worker(rental) }
     end
 
-    def create_worker(rental_with_car)
+    def create_worker(resource)
       Controllers::WorkersController.create(
-        rental: rental_with_car[:rental],
-        price: ::Models::Price.new(rental_with_car, opts),
+        rental: resource.rental,
+        price: ::Models::Price.new(resource, opts),
         opts: opts
       )
     end

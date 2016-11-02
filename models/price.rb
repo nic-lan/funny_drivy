@@ -36,6 +36,18 @@ module Models
       end
     end
 
+    def driver
+      value + deductible_reduction
+    end
+
+    def drivy
+      drivy_fee + deductible_reduction
+    end
+
+    def owner
+      value - (insurance_fee + drivy_fee + assistance_fee)
+    end
+
     private
 
     def commission
