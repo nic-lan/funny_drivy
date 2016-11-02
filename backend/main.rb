@@ -13,7 +13,7 @@ module Backend
     end
 
     attr_reader :repo, :opts
-    delegate :rentals_with_car, to: :repo
+    delegate :rentals, to: :repo
 
     def initialize(data, opts)
       @opts = opts
@@ -27,13 +27,15 @@ module Backend
     private
 
     def rental_serializers
-      rentals_with_car.map do |rental_with_car|
-        Controllers::WorkersController.create(
-          rental: rental_with_car[:rental],
-          price: ::Models::Price.new(rental_with_car, opts),
-          opts: opts
-        )
-      end
+      rentals.map { |rental_with_car| create_worker(rental_with_car) }
+    end
+
+    def create_worker(rental_with_car)
+      Controllers::WorkersController.create(
+        rental: rental_with_car[:rental],
+        price: ::Models::Price.new(rental_with_car, opts),
+        opts: opts
+      )
     end
   end
 end

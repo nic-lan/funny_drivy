@@ -10,21 +10,21 @@ module Services
       @data = data.deep_symbolize_keys
     end
 
-    def rentals_with_car
+    def rentals
       data[:rentals].map do |rental_params|
         rental = ::Models::Rental.new(rental_params)
         car = car_by_rental(rental)
 
-        { rental: rental, car: car }
+        OpenStruct.new(rental: rental, car: car)
       end
     end
 
+    private
+
     def car_by_rental(rental)
       car_params = car_params_by_rental(rental)
-      ::Models::Car.new(car_params) if car_params.present?
+      OpenStruct.new(car_params) if car_params.present?
     end
-
-    private
 
     def car_params_by_rental(rental)
       data[:cars].bsearch { |car_params| car_params[:id] >= rental.car_id }

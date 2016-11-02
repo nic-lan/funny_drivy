@@ -1,88 +1,36 @@
 require "./spec/spec_helper"
 
 RSpec.describe Services::Repository do
-  let(:input_data) { repository_data }
-  let(:rental_params_first) do
-    {
-      id:  1,
-      car_id:  1,
-      start_date:  "2017-12-8",
-      end_date:  "2017-12-10",
-      distance:  100
-    }
-  end
-
-  let(:rental_params_last) do
-    {
-      id:  2,
-      car_id:  1,
-      start_date:  "2017-12-14",
-      end_date:  "2017-12-18",
-      distance:  550
-    }
-  end
-
-  let(:repository_data) do
-    {
-      cars: [
-        { id: 1, price_per_day: 2000, price_per_km: 10 },
-        { id: 2, price_per_day: 3000, price_per_km: 15 }
-      ],
-      rentals: [rental_params_first, rental_params_last]
-    }
-  end
-
   subject { described_class.new(input_data) }
 
-  describe ".new" do
-    it "instantiates correctly from json" do
-      expect(subject.data).to eq repository_data
-    end
-  end
+  describe "#rentals" do
+    let(:input_data) { parse_json("./spec/fixtures/repository_level_1.json") }
 
-  describe "#rentals_with_car" do
-    # FIX ME : context case when not consistent data ( ex: rental with wrong
-    # car_id ) not provided for the moment. It has be assumed that the provided
-    # data that instantiates the repo is correct
-
-    let(:rental_first_id) { 1 }
-    let(:rental_last_id) { 2 }
-
-    it "returns all the existing rentals" do
-      rentals = subject.rentals_with_car
+    it "returns the correct amount of rentals" do
+      rentals = subject.rentals
       expect(rentals.count).to eq 2
 
-      expect(rentals.first[:rental].id).to eq 1
-      expect(rentals.first[:car].id).to eq rentals.first[:rental].car_id
+      rental_first = rentals.first
+      expect(rental_first.rental.id).to eq 1
+      expect(rental_first.rental.car_id).to eq 1
+      expect(rental_first.rental.start_date).to eq "2017-12-8"
+      expect(rental_first.rental.end_date).to eq "2017-12-10"
+      expect(rental_first.rental.distance).to eq 100
 
-      expect(rentals.last[:rental].id).to eq 2
-      expect(rentals.last[:car].id).to eq rentals.last[:rental].car_id
-    end
-  end
+      expect(rental_first.car.id).to eq 1
+      expect(rental_first.car.price_per_day).to eq 2000
+      expect(rental_first.car.price_per_km).to eq 10
 
-  describe "#car_by_rental" do
-    context "when a car is present for the given rental" do
-      let(:rental) { Models::Rental.new(rental_params_first) }
+      rental_last = rentals.last
+      expect(rental_last.rental.id).to eq 2
+      expect(rental_last.rental.car_id).to eq 1
+      expect(rental_last.rental.start_date).to eq "2017-12-14"
+      expect(rental_last.rental.end_date).to eq "2017-12-18"
+      expect(rental_last.rental.distance).to eq 550
 
-      it "returns the car by the given rental" do
-        expect(subject.car_by_rental(rental).id).to eq 1
-      end
-    end
-
-    context "when a car is not present for the given rental" do
-      let(:rental) do
-        Models::Rental.new(
-          id: 1,
-          car_id: 3,
-          start_date: "2017-12-8",
-          end_date: "2017-12-10",
-          distance: 100
-        )
-      end
-
-      it "returns the car by the given rental" do
-        expect(subject.car_by_rental(rental)).to be_nil
-      end
+      expect(rental_last.car.id).to eq 1
+      expect(rental_last.car.price_per_day).to eq 2000
+      expect(rental_last.car.price_per_km).to eq 10
     end
   end
 end
