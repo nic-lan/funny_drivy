@@ -1,5 +1,5 @@
 require "./services/repository"
-require "./serializers/worker"
+require "./controllers/workers_controller"
 require "./models/price"
 
 module Backend
@@ -9,7 +9,7 @@ module Backend
     }.freeze
 
     def self.perform(data, opts = {})
-      new(data, opts).perform
+      new(data, DEFAULTS_OPTS.merge(opts)).perform
     end
 
     attr_reader :repo, :opts
@@ -28,7 +28,7 @@ module Backend
 
     def rental_serializers
       rentals_with_car.map do |rental_with_car|
-        Serializers::Worker.setup(
+        Controllers::WorkersController.create(
           rental: rental_with_car[:rental],
           price: ::Models::Price.new(rental_with_car, opts),
           opts: opts
