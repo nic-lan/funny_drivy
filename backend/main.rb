@@ -1,30 +1,38 @@
-require "./services/repository"
+require "./serializers/collection"
 require "./controllers/workers_controller"
+require "./services/repository"
 require "./models/price"
 
 module Backend
   class Main
     DEFAULTS_OPTS = {
-      discount: false, commission: false, deductible: false, serializer: :base
+      discount: false,
+      commission: false,
+      deductible: false,
+      serializer: :base,
+      path: :rentals
     }.freeze
 
     def self.perform(data, opts = {})
       new(data, DEFAULTS_OPTS.merge(opts)).perform
     end
 
-    attr_reader :repo, :opts
-    delegate :rentals, to: :repo
+    attr_reader :data, :opts
 
     def initialize(data, opts)
       @opts = opts
-      @repo = Services::Repository.new(data)
+      @data = data
     end
 
     def perform
-      { rentals: rental_serializers.map(&:as_json) }.to_json
+      Serializers::Collection.create(opts, rental_serializers).to_json
     end
 
     private
+
+    def rentals
+      Services::Repository.new(data).rentals
+    end
 
     def rental_serializers
       rentals.map { |rental| create_worker(rental) }
