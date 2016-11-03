@@ -8,7 +8,7 @@ describe Serializers::Collection do
 
   describe ".create" do
     context "when opts key path is rentals" do
-      let(:opts) { { path: :rentals } }
+      let(:opts) { { path: :rental } }
 
       it "returns a rental collection" do
         expect(subject).to eq(
@@ -18,7 +18,7 @@ describe Serializers::Collection do
     end
 
     context "when opts key path is rental_modifications" do
-      let(:opts) { { path: :rental_modifications } }
+      let(:opts) { { path: :rental_modification } }
 
       it "returns a rental modification collection" do
         expect(subject).to eq(

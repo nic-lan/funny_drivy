@@ -1,13 +1,13 @@
 require "./spec/spec_helper"
 
-RSpec.describe Services::Repository do
+describe Services::Repositories::Rental do
   subject { described_class.new(input_data) }
 
-  describe "#rentals" do
+  describe "#all" do
     let(:input_data) { parse_json("./spec/fixtures/repository_level_1.json") }
 
     it "returns the correct amount of rentals" do
-      rentals = subject.rentals
+      rentals = subject.all
       expect(rentals.count).to eq 2
 
       rental_first = rentals.first

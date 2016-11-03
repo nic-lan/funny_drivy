@@ -1,6 +1,6 @@
 require "./serializers/collection"
 require "./services/workers_builder"
-require "./services/repository"
+require "./services/repositories/rental"
 require "./models/price"
 
 module Backend
@@ -10,7 +10,7 @@ module Backend
       commission: false,
       deductible: false,
       serializer: :base,
-      path: :rentals
+      path: :rental
     }.freeze
 
     def self.perform(data, opts = {})
@@ -31,11 +31,11 @@ module Backend
     private
 
     def resources
-      Services::Repository.new(data).send(path)
+      resource_repo_class.new(data).all
     end
 
-    def path
-      opts[:path]
+    def resource_repo_class
+      Object.const_get("Services::Repositories::#{opts[:path].to_s.camelize}")
     end
 
     def serializers

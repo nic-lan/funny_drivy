@@ -18,7 +18,7 @@ module Serializers
     private
 
     def hash_key
-      opts[:path]
+      "#{opts[:path]}s".to_sym
     end
   end
 end

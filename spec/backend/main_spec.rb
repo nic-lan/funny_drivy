@@ -50,7 +50,7 @@ RSpec.describe Backend::Main do
           commission: true,
           deductible: true,
           serializer: :improved,
-          path: :modified_rentals
+          path: :rental_modification
         }
       end
     end

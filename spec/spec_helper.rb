@@ -1,6 +1,6 @@
 require "json"
 require "./backend/main"
-require "./services/repository"
+require "./services/repositories/rental"
 require "./models/car"
 require "./models/rental"
 
